@@ -69,6 +69,16 @@ export default function ManageUsers() {
       return;
     }
 
+    // Validate username format
+    if (!/^[a-zA-Z0-9_]+$/.test(newUsername)) {
+      toast({
+        title: 'Invalid Username',
+        description: 'Username can only contain letters, numbers, and underscores',
+        variant: 'destructive'
+      });
+      return;
+    }
+
     if (newPassword.length < 6) {
       toast({
         title: 'Error',
@@ -84,16 +94,18 @@ export default function ManageUsers() {
 
     if (result.success) {
       toast({
-        title: 'Success',
+        title: 'Success! 🎉',
         description: `${newRole === 'child' ? 'Child' : 'Parent'} account created successfully`,
       });
       
-      // Show credentials to therapist
-      toast({
-        title: 'Login Credentials',
-        description: `Username: ${newUsername}\nPassword: ${newPassword}\nPlease share these with the ${newRole}.`,
-        duration: 10000
-      });
+      // Show credentials in a more prominent way
+      setTimeout(() => {
+        toast({
+          title: '📋 Login Credentials',
+          description: `Username: ${newUsername}\nPassword: ${newPassword}\n\nPlease save these and share with the ${newRole}.`,
+          duration: 15000
+        });
+      }, 500);
 
       setShowCreateDialog(false);
       setNewUsername('');
@@ -102,10 +114,20 @@ export default function ManageUsers() {
       setNewRole('child');
       loadData();
     } else {
+      let errorMessage = result.error || 'Failed to create account';
+      
+      // Provide more helpful error messages
+      if (errorMessage.includes('duplicate') || errorMessage.includes('unique')) {
+        errorMessage = 'This username is already taken. Please choose a different username.';
+      } else if (errorMessage.includes('password')) {
+        errorMessage = 'Password must be at least 6 characters long.';
+      }
+      
       toast({
-        title: 'Error',
-        description: result.error || 'Failed to create account',
-        variant: 'destructive'
+        title: 'Error Creating Account',
+        description: errorMessage,
+        variant: 'destructive',
+        duration: 7000
       });
     }
   };
@@ -207,10 +229,13 @@ export default function ManageUsers() {
                 <div className="space-y-2">
                   <Label>Username</Label>
                   <Input
-                    placeholder="Enter username"
+                    placeholder="Enter username (letters, numbers, underscore only)"
                     value={newUsername}
                     onChange={(e) => setNewUsername(e.target.value)}
                   />
+                  <p className="text-xs text-muted-foreground">
+                    Only letters, numbers, and underscores. No spaces.
+                  </p>
                 </div>
                 <div className="space-y-2">
                   <Label>Password</Label>

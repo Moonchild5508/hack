@@ -427,6 +427,9 @@ export async function createUserAccount(username: string, password: string, full
   try {
     const email = `${username}@miaoda.com`;
     
+    // Get current session to restore later
+    const { data: { session: currentSession } } = await supabase.auth.getSession();
+    
     // Create auth user
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
@@ -435,22 +438,40 @@ export async function createUserAccount(username: string, password: string, full
         data: {
           username,
           full_name: fullName
-        }
+        },
+        emailRedirectTo: undefined
       }
     });
 
     if (authError) throw authError;
     if (!authData.user) throw new Error('User creation failed');
 
-    // Update role
-    const { error: roleError } = await supabase
-      .from('profiles')
-      .update({ role })
-      .eq('id', authData.user.id);
+    const newUserId = authData.user.id;
 
-    if (roleError) throw roleError;
+    // Restore the therapist's session if it was replaced
+    if (currentSession && authData.session) {
+      await supabase.auth.setSession({
+        access_token: currentSession.access_token,
+        refresh_token: currentSession.refresh_token
+      });
+    }
 
-    return { success: true, userId: authData.user.id };
+    // Wait a moment for trigger to create profile
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    // Update role and full_name using RPC function
+    const { data: rpcData, error: rpcError } = await supabase.rpc('update_user_role', {
+      user_id: newUserId,
+      new_role: role,
+      new_full_name: fullName
+    });
+
+    if (rpcError) {
+      console.error('Error updating via RPC:', rpcError);
+      throw new Error(`Profile created but role update failed: ${rpcError.message}`);
+    }
+
+    return { success: true, userId: newUserId };
   } catch (error: any) {
     console.error('Error creating user account:', error);
     return { success: false, error: error.message };
