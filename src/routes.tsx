@@ -5,6 +5,14 @@ import AACBuilder from './pages/AACBuilder';
 import ScheduleBuilder from './pages/ScheduleBuilder';
 import ViewAAC from './pages/ViewAAC';
 import ViewSchedule from './pages/ViewSchedule';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import TherapistDashboard from './pages/TherapistDashboard';
+import ChildDashboard from './pages/ChildDashboard';
+import PlayActivity from './pages/PlayActivity';
+import AssignActivity from './pages/AssignActivity';
+import Admin from './pages/Admin';
+import MatchingActivityBuilder from './pages/MatchingActivityBuilder';
 import type { ReactNode } from 'react';
 
 interface RouteConfig {
@@ -15,6 +23,18 @@ interface RouteConfig {
 }
 
 const routes: RouteConfig[] = [
+  {
+    name: 'Login',
+    path: '/login',
+    element: <Login />,
+    visible: false
+  },
+  {
+    name: 'Signup',
+    path: '/signup',
+    element: <Signup />,
+    visible: false
+  },
   {
     name: 'Home',
     path: '/',
@@ -28,7 +48,7 @@ const routes: RouteConfig[] = [
   {
     name: 'Activity Builder',
     path: '/activity-builder',
-    element: <ActivityBuilder />
+    element: <MatchingActivityBuilder />
   },
   {
     name: 'AAC Builder',
@@ -39,6 +59,36 @@ const routes: RouteConfig[] = [
     name: 'Schedule Builder',
     path: '/schedule-builder',
     element: <ScheduleBuilder />
+  },
+  {
+    name: 'Therapist Dashboard',
+    path: '/therapist-dashboard',
+    element: <TherapistDashboard />,
+    visible: false
+  },
+  {
+    name: 'Child Dashboard',
+    path: '/child-dashboard',
+    element: <ChildDashboard />,
+    visible: false
+  },
+  {
+    name: 'Play Activity',
+    path: '/play-activity/:assignmentId',
+    element: <PlayActivity />,
+    visible: false
+  },
+  {
+    name: 'Assign Activity',
+    path: '/assign-activity/:activityId',
+    element: <AssignActivity />,
+    visible: false
+  },
+  {
+    name: 'Admin',
+    path: '/admin',
+    element: <Admin />,
+    visible: false
   },
   {
     name: 'View AAC',

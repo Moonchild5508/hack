@@ -11,11 +11,13 @@ export interface MultilingualLabel {
   regional: string;
 }
 
+export type SymbolCategory = 'food' | 'transport' | 'festival' | 'routine' | 'emotion' | 'action' | 'object' | 'place';
+
 export interface Symbol {
   id: string;
   imageUrl: string;
   labels: MultilingualLabel;
-  category: 'food' | 'transport' | 'festival' | 'routine' | 'emotion' | 'action' | 'object' | 'place';
+  category: SymbolCategory;
   tags: string[];
 }
 
@@ -76,3 +78,81 @@ export interface LanguageSettings {
   regional: boolean;
   regionalLanguage: 'tamil' | 'telugu' | 'marathi' | 'bengali' | 'gujarati' | 'kannada';
 }
+
+// Database types
+export type UserRole = 'therapist' | 'child' | 'admin';
+export type ActivityType = 'matching' | 'sorting' | 'choice' | 'aac_board' | 'visual_schedule';
+export type AssignmentStatus = 'assigned' | 'in_progress' | 'completed';
+
+export interface Profile {
+  id: string;
+  username: string;
+  email: string | null;
+  full_name: string | null;
+  role: UserRole;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DBActivity {
+  id: string;
+  therapist_id: string;
+  name: string;
+  type: ActivityType;
+  content: any;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Assignment {
+  id: string;
+  activity_id: string;
+  child_id: string;
+  therapist_id: string;
+  assigned_at: string;
+  due_date: string | null;
+  status: AssignmentStatus;
+}
+
+export interface ActivityResponse {
+  id: string;
+  assignment_id: string;
+  child_id: string;
+  activity_id: string;
+  answers: Record<string, any>;
+  score: number;
+  total_questions: number;
+  completed_at: string;
+  time_spent_seconds: number;
+}
+
+// Progress tracking types
+export interface ChildProgress {
+  child: Profile;
+  totalAssignments: number;
+  completedAssignments: number;
+  averageScore: number;
+  lastActivity: string | null;
+}
+
+export interface ActivityProgress {
+  activity: DBActivity;
+  totalAssignments: number;
+  completedCount: number;
+  averageScore: number;
+  responses: ActivityResponse[];
+}
+
+// Matching activity types
+export interface MatchingQuestion {
+  id: string;
+  leftSymbolId: string;
+  rightOptions: MatchingOption[];
+  correctOptionId: string;
+}
+
+export interface MatchingOption {
+  id: string;
+  symbolId: string;
+}
+
