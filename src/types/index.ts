@@ -11,7 +11,7 @@ export interface MultilingualLabel {
   regional: string;
 }
 
-export type SymbolCategory = 'food' | 'transport' | 'festival' | 'routine' | 'emotion' | 'action' | 'object' | 'place';
+export type SymbolCategory = 'food' | 'transport' | 'festival' | 'routine' | 'emotion' | 'action' | 'object' | 'place' | 'body' | 'family' | 'animal' | 'color' | 'number' | 'weather';
 
 export interface Symbol {
   id: string;

@@ -24,6 +24,27 @@ Welcome to the Therapy Activity Authoring Studio documentation! This index will 
 
 ## 📖 Feature Documentation
 
+### Symbol Library Expansion
+
+**[EXPANDED_SYMBOL_LIBRARY.md](EXPANDED_SYMBOL_LIBRARY.md)** - Complete documentation
+- 113 symbols across 14 categories
+- 6 new categories (Body, Family, Animal, Color, Number, Weather)
+- Multilingual support (English, Hindi, Regional)
+- OpenSymbols.org inspiration
+- Comprehensive usage guide
+
+**[SYMBOL_LIBRARY_SUMMARY.md](SYMBOL_LIBRARY_SUMMARY.md)** - Quick overview
+- What changed (31 → 113 symbols)
+- New categories at a glance
+- Key features and benefits
+- Quick examples
+
+**[NEW_CATEGORIES_GUIDE.md](NEW_CATEGORIES_GUIDE.md)** - Visual guide
+- Detailed breakdown of 6 new categories
+- Sample boards for each category
+- Use cases and applications
+- Cultural context
+
 ### Grid Size Selection & Icon Search
 
 **[GRID_AND_SEARCH_FEATURES.md](GRID_AND_SEARCH_FEATURES.md)** - Comprehensive guide (13KB)

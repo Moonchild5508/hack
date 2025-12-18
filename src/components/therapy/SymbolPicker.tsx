@@ -81,15 +81,21 @@ export default function SymbolPicker({ onSelect, languageSettings }: SymbolPicke
         </ScrollArea>
       ) : (
         <Tabs defaultValue="food" className="flex-1 flex flex-col">
-          <TabsList className="grid grid-cols-4 xl:grid-cols-8 mb-4">
+          <TabsList className="grid grid-cols-4 xl:grid-cols-7 mb-4 h-auto">
             <TabsTrigger value="food">Food</TabsTrigger>
-            <TabsTrigger value="transport">Transport</TabsTrigger>
-            <TabsTrigger value="festival">Festival</TabsTrigger>
-            <TabsTrigger value="routine">Routine</TabsTrigger>
-            <TabsTrigger value="emotion">Emotion</TabsTrigger>
             <TabsTrigger value="action">Action</TabsTrigger>
-            <TabsTrigger value="place">Place</TabsTrigger>
+            <TabsTrigger value="emotion">Emotion</TabsTrigger>
+            <TabsTrigger value="body">Body</TabsTrigger>
+            <TabsTrigger value="family">Family</TabsTrigger>
+            <TabsTrigger value="animal">Animal</TabsTrigger>
+            <TabsTrigger value="color">Color</TabsTrigger>
+            <TabsTrigger value="number">Number</TabsTrigger>
             <TabsTrigger value="object">Object</TabsTrigger>
+            <TabsTrigger value="transport">Transport</TabsTrigger>
+            <TabsTrigger value="place">Place</TabsTrigger>
+            <TabsTrigger value="routine">Routine</TabsTrigger>
+            <TabsTrigger value="festival">Festival</TabsTrigger>
+            <TabsTrigger value="weather">Weather</TabsTrigger>
           </TabsList>
 
           {Object.entries(categorizedSymbols).map(([category, symbols]) => (

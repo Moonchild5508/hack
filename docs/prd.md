@@ -64,49 +64,54 @@ A web-based platform designed for therapists working with children with ADHD and
   - Emotions (happy, sad, angry, tired, excited)
   - Common objects (book, pen, water bottle, bag, shoes)
   - Family members (mother, father, sister, brother, grandparents)
-  - Places (home, school, park, temple, hospital, market)\n- One-click symbol addition functionality
+  - Places (home, school, park, temple, hospital, market)\n- **Integration with OpenSymbols.org**: Access to extensive open-source symbol library from https://www.opensymbols.org/
+  - Expanded emoji and symbol options covering diverse categories
+  - Additional cultural and contextual symbols beyond Indian-specific content
+  - Searchable database of open-source AAC symbols
+  - Direct import functionality from OpenSymbols repository
+- One-click symbol addition functionality
 - Symbol-based interface to support focus needs of ADHD and Autism users
 - **Icon search functionality**: Search bar allowing therapists to quickly find icons by keyword in English, Hindi, or regional languages
-- Real-time search results with icon preview
-- Filter options by category (food, transport, emotions, etc.)
+- Real-time search results with icon preview\n- Filter options by category (food, transport, emotions, etc.)\n- Search across both local Indian library and OpenSymbols.org database
 
 #### 3.1.3 Multilingual Label System
 - Support for three language layers per item:
   - English
   - Hindi
-  - One regional language (Tamil/Telugu/Marathi/etc.)
-- Language toggle controls (ON/OFF per language)
-- Single or bilingual display mode\n- Example format: Symbol with English 'Apple', Hindi 'सेब', Tamil 'ஆப்பிள்'\n
+  - One regional language (Tamil/Telugu/Marathi/etc.)\n- Language toggle controls (ON/OFF per language)
+- Single or bilingual display mode
+- Example format: Symbol with English 'Apple', Hindi 'सेब', Tamil 'ஆப்பிள்'
+
 ### 3.2 AAC & Visual Tools
 
 #### 3.2.1 AAC Board Builder
 - **Customizable grid layout options**: Therapist can select any n×n grid size (e.g., 2×2, 3×3, 4×4, 5×5, 6×6, etc.)
-- Grid size selector with dropdown or input field for custom dimensions
-- Each cell contains:
+- Grid size selector with dropdown or input field for custom dimensions\n- Each cell contains:
   - Symbol/image
   - Text label
   - Audio output (TTS or recorded)
 - Interactive functionality: click symbol to play audio
 - Based on LAMP Words for Life AAC methodology
-
-#### 3.2.2 Sentence Builder with Text Box
-- Horizontal text box displayed at the top or bottom of the AAC board
+\n#### 3.2.2 Sentence Builder with Text Box\n- Horizontal text box displayed at the top or bottom of the AAC board
 - Click any icon to add it to the text box in sequence
-- Icons appear in the text box with their corresponding text labels\n- Clear button to reset the text box
+- Icons appear in the text box with their corresponding text labels
+- Clear button to reset the text box
 - Delete last icon button for corrections
 - Speak button to read aloud the entire sentence using text-to-speech
 - Visual feedback when icons are added (highlight or animation)
-- Supports multilingual sentence construction based on selected language\n
+- Supports multilingual sentence construction based on selected language
+
 #### 3.2.3 Visual Schedule Creator
-- Step-by-step routine builder
-- Sequential activity flow (e.g., Wake up → Brush → Uniform → School)
+- Step-by-step routine builder\n- Sequential activity flow (e.g., Wake up → Brush → Uniform → School)
 - Mobile-optimized viewing interface
 - Tap-to-advance functionality for parents
 
-### 3.3 Export & Sharing
+### 3.3 Export & Sharing\n
+#### 3.3.1 Export Formats
+- PDF (printable format)
+- PNG images
+- Web link (low-bandwidth optimized)
 
-#### 3.3.1 Export Formats\n- PDF (printable format)\n- PNG images
-- Web link (low-bandwidth optimized)\n
 #### 3.3.2 Parent Assignment System
 - Generate shareable links
 - WhatsApp-compatible sharing
@@ -115,20 +120,17 @@ A web-based platform designed for therapists working with children with ADHD and
 - Low data consumption design
 
 ### 3.4 Technical Requirements
-
-#### 3.4.1 Low-Bandwidth Optimization
-- Fast loading on 3G networks
+\n#### 3.4.1 Low-Bandwidth Optimization\n- Fast loading on 3G networks
 - Content caching capability
 - Offline functionality after initial load
-- Minimal animations
-- Optimized for basic smartphones (Anganwadi phone compatibility)
+- Minimal animations\n- Optimized for basic smartphones (Anganwadi phone compatibility)
 
 ## 4. MVP Success Criteria
 The platform must deliver these core capabilities:
 1. Three-tier login system (therapist, parent, child)
 2. Therapist dashboard with client management
 3. Drag-and-drop activity builder
-4. Expanded Indian symbol library with icon search functionality
+4. Expanded Indian symbol library with icon search functionality and OpenSymbols.org integration
 5. Enhanced matching activities (memory match, match the halves, picture to name)
 6. Multilingual labels
 7. AAC boards with customizable n×n grid size and sentence builder with text-to-speech
@@ -153,10 +155,11 @@ The platform must deliver these core capabilities:
 - Grid size selector with intuitive controls
 
 ### 5.3 Layout Approach
-- Card-based interface for activity templates\n- Grid system for AAC boards and symbol libraries
-- Linear flow for visual schedules
+- Card-based interface for activity templates
+- Grid system for AAC boards and symbol libraries\n- Linear flow for visual schedules
 - Sticky toolbar for frequently used tools
 - Prominent text box placement for sentence building
-- Dashboard with clear sections for client management
-- Mobile-first responsive design
-- Search functionality positioned prominently in content library header
+- Dashboard with clear sections for client management\n- Mobile-first responsive design\n- Search functionality positioned prominently in content library header
+
+## 6. Reference Resources
+- OpenSymbols.org: https://www.opensymbols.org/
