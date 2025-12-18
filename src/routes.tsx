@@ -1,4 +1,10 @@
-import SamplePage from './pages/SamplePage';
+import Home from './pages/Home';
+import Library from './pages/Library';
+import ActivityBuilder from './pages/ActivityBuilder';
+import AACBuilder from './pages/AACBuilder';
+import ScheduleBuilder from './pages/ScheduleBuilder';
+import ViewAAC from './pages/ViewAAC';
+import ViewSchedule from './pages/ViewSchedule';
 import type { ReactNode } from 'react';
 
 interface RouteConfig {
@@ -10,9 +16,41 @@ interface RouteConfig {
 
 const routes: RouteConfig[] = [
   {
-    name: 'Sample Page',
+    name: 'Home',
     path: '/',
-    element: <SamplePage />
+    element: <Home />
+  },
+  {
+    name: 'Library',
+    path: '/library',
+    element: <Library />
+  },
+  {
+    name: 'Activity Builder',
+    path: '/activity-builder',
+    element: <ActivityBuilder />
+  },
+  {
+    name: 'AAC Builder',
+    path: '/aac-builder',
+    element: <AACBuilder />
+  },
+  {
+    name: 'Schedule Builder',
+    path: '/schedule-builder',
+    element: <ScheduleBuilder />
+  },
+  {
+    name: 'View AAC',
+    path: '/view/aac/:id',
+    element: <ViewAAC />,
+    visible: false
+  },
+  {
+    name: 'View Schedule',
+    path: '/view/schedule/:id',
+    element: <ViewSchedule />,
+    visible: false
   }
 ];
 
