@@ -9,10 +9,12 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import TherapistDashboard from './pages/TherapistDashboard';
 import ChildDashboard from './pages/ChildDashboard';
+import ParentDashboard from './pages/ParentDashboard';
 import PlayActivity from './pages/PlayActivity';
 import AssignActivity from './pages/AssignActivity';
 import Admin from './pages/Admin';
 import MatchingActivityBuilder from './pages/MatchingActivityBuilder';
+import ManageUsers from './pages/ManageUsers';
 import type { ReactNode } from 'react';
 
 interface RouteConfig {
@@ -70,6 +72,18 @@ const routes: RouteConfig[] = [
     name: 'Child Dashboard',
     path: '/child-dashboard',
     element: <ChildDashboard />,
+    visible: false
+  },
+  {
+    name: 'Parent Dashboard',
+    path: '/parent-dashboard',
+    element: <ParentDashboard />,
+    visible: false
+  },
+  {
+    name: 'Manage Users',
+    path: '/manage-users',
+    element: <ManageUsers />,
     visible: false
   },
   {

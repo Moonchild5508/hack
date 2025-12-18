@@ -110,6 +110,7 @@ export default function Admin() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="child">Child</SelectItem>
+                          <SelectItem value="parent">Parent</SelectItem>
                           <SelectItem value="therapist">Therapist</SelectItem>
                           <SelectItem value="admin">Admin</SelectItem>
                         </SelectContent>
@@ -131,7 +132,7 @@ export default function Admin() {
           <CardTitle>System Statistics</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-3 gap-4 text-center">
+          <div className="grid grid-cols-4 gap-4 text-center">
             <div>
               <p className="text-2xl font-bold">{users.length}</p>
               <p className="text-sm text-muted-foreground">Total Users</p>
@@ -141,6 +142,12 @@ export default function Admin() {
                 {users.filter(u => u.role === 'therapist').length}
               </p>
               <p className="text-sm text-muted-foreground">Therapists</p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold">
+                {users.filter(u => u.role === 'parent').length}
+              </p>
+              <p className="text-sm text-muted-foreground">Parents</p>
             </div>
             <div>
               <p className="text-2xl font-bold">

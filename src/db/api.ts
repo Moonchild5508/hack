@@ -1,5 +1,5 @@
 import { supabase } from './supabase';
-import type { Profile, DBActivity, Assignment, ActivityResponse, UserRole } from '@/types';
+import type { Profile, DBActivity, Assignment, ActivityResponse, UserRole, ParentChildLink } from '@/types';
 
 // Profile operations
 export async function getProfile(userId: string): Promise<Profile | null> {
@@ -340,3 +340,120 @@ export async function getAllChildrenProgress(therapistId: string) {
 
   return progressData.filter(p => p.child !== null);
 }
+
+// Parent-child link operations
+export async function createParentChildLink(parentId: string, childId: string, therapistId: string): Promise<ParentChildLink | null> {
+  const { data, error } = await supabase
+    .from('parent_child_links')
+    .insert({
+      parent_id: parentId,
+      child_id: childId,
+      created_by_therapist_id: therapistId
+    })
+    .select()
+    .maybeSingle();
+
+  if (error) {
+    console.error('Error creating parent-child link:', error);
+    return null;
+  }
+  return data;
+}
+
+export async function getParentChildLinks(parentId: string): Promise<ParentChildLink[]> {
+  const { data, error } = await supabase
+    .from('parent_child_links')
+    .select('*')
+    .eq('parent_id', parentId);
+
+  if (error) {
+    console.error('Error fetching parent-child links:', error);
+    return [];
+  }
+  return Array.isArray(data) ? data : [];
+}
+
+export async function getChildrenForParent(parentId: string): Promise<Profile[]> {
+  const { data, error } = await supabase
+    .from('parent_child_links')
+    .select('child_id')
+    .eq('parent_id', parentId);
+
+  if (error || !data) {
+    console.error('Error fetching children for parent:', error);
+    return [];
+  }
+
+  const childIds = data.map(link => link.child_id);
+  if (childIds.length === 0) return [];
+
+  const children = await Promise.all(childIds.map(id => getProfile(id)));
+  return children.filter(child => child !== null) as Profile[];
+}
+
+export async function getParentsForChild(childId: string): Promise<Profile[]> {
+  const { data, error } = await supabase
+    .from('parent_child_links')
+    .select('parent_id')
+    .eq('child_id', childId);
+
+  if (error || !data) {
+    console.error('Error fetching parents for child:', error);
+    return [];
+  }
+
+  const parentIds = data.map(link => link.parent_id);
+  if (parentIds.length === 0) return [];
+
+  const parents = await Promise.all(parentIds.map(id => getProfile(id)));
+  return parents.filter(parent => parent !== null) as Profile[];
+}
+
+export async function deleteParentChildLink(linkId: string): Promise<boolean> {
+  const { error } = await supabase
+    .from('parent_child_links')
+    .delete()
+    .eq('id', linkId);
+
+  if (error) {
+    console.error('Error deleting parent-child link:', error);
+    return false;
+  }
+  return true;
+}
+
+// Create user account (for therapists to create child/parent accounts)
+export async function createUserAccount(username: string, password: string, fullName: string, role: UserRole): Promise<{ success: boolean; userId?: string; error?: string }> {
+  try {
+    const email = `${username}@miaoda.com`;
+    
+    // Create auth user
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          username,
+          full_name: fullName
+        }
+      }
+    });
+
+    if (authError) throw authError;
+    if (!authData.user) throw new Error('User creation failed');
+
+    // Update role
+    const { error: roleError } = await supabase
+      .from('profiles')
+      .update({ role })
+      .eq('id', authData.user.id);
+
+    if (roleError) throw roleError;
+
+    return { success: true, userId: authData.user.id };
+  } catch (error: any) {
+    console.error('Error creating user account:', error);
+    return { success: false, error: error.message };
+  }
+}
+

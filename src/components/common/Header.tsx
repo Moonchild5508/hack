@@ -58,6 +58,12 @@ export default function Header() {
                     Dashboard
                   </Link>
                   <Link
+                    to="/manage-users"
+                    className="transition-colors hover:text-primary"
+                  >
+                    Manage Users
+                  </Link>
+                  <Link
                     to="/activity-builder"
                     className="transition-colors hover:text-primary"
                   >
@@ -71,6 +77,14 @@ export default function Header() {
                   className="transition-colors hover:text-primary"
                 >
                   My Activities
+                </Link>
+              )}
+              {profile?.role === 'parent' && (
+                <Link
+                  to="/parent-dashboard"
+                  className="transition-colors hover:text-primary"
+                >
+                  My Children
                 </Link>
               )}
               {profile?.role === 'admin' && (
@@ -116,6 +130,12 @@ export default function Header() {
                   <DropdownMenuItem onClick={() => navigate('/child-dashboard')}>
                     <LayoutDashboard className="mr-2 h-4 w-4" />
                     My Activities
+                  </DropdownMenuItem>
+                )}
+                {profile.role === 'parent' && (
+                  <DropdownMenuItem onClick={() => navigate('/parent-dashboard')}>
+                    <LayoutDashboard className="mr-2 h-4 w-4" />
+                    My Children
                   </DropdownMenuItem>
                 )}
                 {profile.role === 'admin' && (

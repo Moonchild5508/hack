@@ -80,8 +80,8 @@ export interface LanguageSettings {
 }
 
 // Database types
-export type UserRole = 'therapist' | 'child' | 'admin';
-export type ActivityType = 'matching' | 'sorting' | 'choice' | 'aac_board' | 'visual_schedule';
+export type UserRole = 'therapist' | 'child' | 'parent' | 'admin';
+export type ActivityType = 'matching' | 'memory_match' | 'match_halves' | 'match_picture_name' | 'sorting' | 'choice' | 'aac_board' | 'visual_schedule';
 export type AssignmentStatus = 'assigned' | 'in_progress' | 'completed';
 
 export interface Profile {
@@ -154,5 +154,39 @@ export interface MatchingQuestion {
 export interface MatchingOption {
   id: string;
   symbolId: string;
+}
+
+// Parent-child relationship
+export interface ParentChildLink {
+  id: string;
+  parent_id: string;
+  child_id: string;
+  created_by_therapist_id: string;
+  created_at: string;
+}
+
+// Memory match game types
+export interface MemoryCard {
+  id: string;
+  symbolId: string;
+  pairId: string;
+  isFlipped: boolean;
+  isMatched: boolean;
+}
+
+// Match halves game types
+export interface HalfMatchQuestion {
+  id: string;
+  leftHalfSymbolId: string;
+  rightHalfOptions: { id: string; symbolId: string }[];
+  correctOptionId: string;
+}
+
+// Match picture to name game types
+export interface PictureNameQuestion {
+  id: string;
+  symbolId: string;
+  nameOptions: { id: string; name: string }[];
+  correctOptionId: string;
 }
 
