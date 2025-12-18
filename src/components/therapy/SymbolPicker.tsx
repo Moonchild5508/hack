@@ -52,12 +52,18 @@ export default function SymbolPicker({ onSelect, languageSettings }: SymbolPicke
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
-            placeholder="Search symbols..."
+            placeholder="Search symbols by name (e.g., 'apple', 'bus', 'diwali')..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
+            autoFocus
           />
         </div>
+        {searchQuery && (
+          <p className="text-xs text-muted-foreground mt-2">
+            Found {filteredSymbols.length} symbol{filteredSymbols.length !== 1 ? 's' : ''} matching "{searchQuery}"
+          </p>
+        )}
       </div>
 
       {searchQuery ? (

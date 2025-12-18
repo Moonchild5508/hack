@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { ArrowLeft, Save, Volume2, Plus, Share2, Download } from 'lucide-react';
+import { ArrowLeft, Save, Volume2, Plus, Share2, Download, Grid3x3 } from 'lucide-react';
 import { saveAACBoard, getAACBoardById } from '@/lib/storage';
 import { getSymbolById } from '@/data/symbolLibrary';
 import { speak } from '@/lib/tts';
@@ -21,10 +21,13 @@ export default function AACBuilder() {
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const [boardName, setBoardName] = useState('My AAC Board');
-  const [gridSize, setGridSize] = useState<'2x2' | '3x3' | '4x4'>('3x3');
+  const [gridSize, setGridSize] = useState<'2x2' | '3x3' | '4x4' | 'custom'>('3x3');
+  const [customRows, setCustomRows] = useState(3);
+  const [customCols, setCustomCols] = useState(3);
   const [cells, setCells] = useState<AACCell[]>([]);
   const [selectedCellIndex, setSelectedCellIndex] = useState<number | null>(null);
   const [isSymbolPickerOpen, setIsSymbolPickerOpen] = useState(false);
+  const [showCustomGridDialog, setShowCustomGridDialog] = useState(false);
   const [boardId] = useState(searchParams.get('id') || `aac-${Date.now()}`);
 
   useEffect(() => {
@@ -34,6 +37,10 @@ export default function AACBuilder() {
       if (board) {
         setBoardName(board.name);
         setGridSize(board.gridSize);
+        if (board.gridSize === 'custom' && board.customRows && board.customCols) {
+          setCustomRows(board.customRows);
+          setCustomCols(board.customCols);
+        }
         setCells(board.cells);
       }
     } else {
@@ -41,20 +48,61 @@ export default function AACBuilder() {
     }
   }, [searchParams]);
 
-  const initializeCells = (size: '2x2' | '3x3' | '4x4') => {
-    const gridSizes = { '2x2': 4, '3x3': 9, '4x4': 16 };
-    const cellCount = gridSizes[size];
+  const initializeCells = (size: '2x2' | '3x3' | '4x4' | 'custom', rows?: number, cols?: number) => {
+    let cellCount: number;
+    let gridRows: number;
+    let gridCols: number;
+
+    if (size === 'custom') {
+      gridRows = rows || customRows;
+      gridCols = cols || customCols;
+      cellCount = gridRows * gridCols;
+    } else {
+      const gridSizes = { '2x2': 4, '3x3': 9, '4x4': 16 };
+      cellCount = gridSizes[size];
+      const sizeNum = parseInt(size.charAt(0));
+      gridRows = sizeNum;
+      gridCols = sizeNum;
+    }
+
     const newCells: AACCell[] = Array.from({ length: cellCount }, (_, i) => ({
       id: `cell-${i}`,
       label: '',
       audioText: ''
     }));
     setCells(newCells);
+    
+    if (size === 'custom') {
+      setCustomRows(gridRows);
+      setCustomCols(gridCols);
+    }
   };
 
-  const handleGridSizeChange = (size: '2x2' | '3x3' | '4x4') => {
-    setGridSize(size);
-    initializeCells(size);
+  const handleGridSizeChange = (size: '2x2' | '3x3' | '4x4' | 'custom') => {
+    if (size === 'custom') {
+      setShowCustomGridDialog(true);
+    } else {
+      setGridSize(size);
+      initializeCells(size);
+    }
+  };
+
+  const handleCustomGridApply = () => {
+    if (customRows < 1 || customRows > 10 || customCols < 1 || customCols > 10) {
+      toast({
+        title: 'Invalid Grid Size',
+        description: 'Grid size must be between 1x1 and 10x10',
+        variant: 'destructive'
+      });
+      return;
+    }
+    setGridSize('custom');
+    initializeCells('custom', customRows, customCols);
+    setShowCustomGridDialog(false);
+    toast({
+      title: 'Grid Size Updated',
+      description: `Grid set to ${customRows}×${customCols}`
+    });
   };
 
   const handleCellClick = (index: number) => {
@@ -98,6 +146,8 @@ export default function AACBuilder() {
       id: boardId,
       name: boardName,
       gridSize,
+      customRows: gridSize === 'custom' ? customRows : undefined,
+      customCols: gridSize === 'custom' ? customCols : undefined,
       cells,
       createdAt: searchParams.get('id') ? getAACBoardById(boardId)?.createdAt || new Date().toISOString() : new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -143,8 +193,22 @@ export default function AACBuilder() {
   };
 
   const getGridCols = () => {
+    if (gridSize === 'custom') {
+      return `grid-cols-${customCols}`;
+    }
     const cols = { '2x2': 'grid-cols-2', '3x3': 'grid-cols-3', '4x4': 'grid-cols-4' };
     return cols[gridSize];
+  };
+
+  const getGridStyle = () => {
+    if (gridSize === 'custom') {
+      return {
+        display: 'grid',
+        gridTemplateColumns: `repeat(${customCols}, minmax(0, 1fr))`,
+        gridTemplateRows: `repeat(${customRows}, minmax(0, 1fr))`
+      };
+    }
+    return {};
   };
 
   return (
@@ -199,7 +263,7 @@ export default function AACBuilder() {
                   </div>
                   <div>
                     <Label htmlFor="grid-size">Grid Size</Label>
-                    <Select value={gridSize} onValueChange={(value) => handleGridSizeChange(value as '2x2' | '3x3' | '4x4')}>
+                    <Select value={gridSize} onValueChange={(value) => handleGridSizeChange(value as '2x2' | '3x3' | '4x4' | 'custom')}>
                       <SelectTrigger id="grid-size">
                         <SelectValue />
                       </SelectTrigger>
@@ -207,8 +271,16 @@ export default function AACBuilder() {
                         <SelectItem value="2x2">2×2 (4 cells)</SelectItem>
                         <SelectItem value="3x3">3×3 (9 cells)</SelectItem>
                         <SelectItem value="4x4">4×4 (16 cells)</SelectItem>
+                        <SelectItem value="custom">
+                          Custom Size {gridSize === 'custom' && `(${customRows}×${customCols})`}
+                        </SelectItem>
                       </SelectContent>
                     </Select>
+                    {gridSize === 'custom' && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Current: {customRows}×{customCols} ({customRows * customCols} cells)
+                      </p>
+                    )}
                   </div>
                   <div className="pt-4 border-t">
                     <p className="text-sm text-muted-foreground mb-2">
@@ -227,7 +299,10 @@ export default function AACBuilder() {
                 <CardContent>
                   <div id="aac-board-preview" className="bg-background p-6 rounded-lg">
                     <h2 className="text-2xl font-bold mb-6 text-center">{boardName}</h2>
-                    <div className={`grid ${getGridCols()} gap-4`}>
+                    <div 
+                      className={gridSize !== 'custom' ? `grid ${getGridCols()} gap-4` : 'gap-4'}
+                      style={gridSize === 'custom' ? getGridStyle() : {}}
+                    >
                       {cells.map((cell, index) => {
                         const symbol = cell.symbolId ? getSymbolById(cell.symbolId) : null;
                         return (
@@ -286,6 +361,54 @@ export default function AACBuilder() {
             <DialogTitle>Select a Symbol</DialogTitle>
           </DialogHeader>
           <SymbolPicker onSelect={handleSymbolSelect} />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showCustomGridDialog} onOpenChange={setShowCustomGridDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Custom Grid Size</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="custom-rows">Number of Rows</Label>
+              <Input
+                id="custom-rows"
+                type="number"
+                min="1"
+                max="10"
+                value={customRows}
+                onChange={(e) => setCustomRows(parseInt(e.target.value) || 1)}
+                placeholder="Enter rows (1-10)"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="custom-cols">Number of Columns</Label>
+              <Input
+                id="custom-cols"
+                type="number"
+                min="1"
+                max="10"
+                value={customCols}
+                onChange={(e) => setCustomCols(parseInt(e.target.value) || 1)}
+                placeholder="Enter columns (1-10)"
+              />
+            </div>
+            <div className="p-3 bg-muted rounded-lg">
+              <p className="text-sm text-muted-foreground">
+                Preview: {customRows}×{customCols} grid with {customRows * customCols} cells
+              </p>
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setShowCustomGridDialog(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleCustomGridApply}>
+                <Grid3x3 className="w-4 h-4 mr-2" />
+                Apply Grid
+              </Button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

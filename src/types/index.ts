@@ -51,7 +51,9 @@ export interface AACCell {
 export interface AACBoard {
   id: string;
   name: string;
-  gridSize: '2x2' | '3x3' | '4x4';
+  gridSize: '2x2' | '3x3' | '4x4' | 'custom';
+  customRows?: number;
+  customCols?: number;
   cells: AACCell[];
   createdAt: string;
   updatedAt: string;
