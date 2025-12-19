@@ -15,6 +15,10 @@ import AssignActivity from './pages/AssignActivity';
 import Admin from './pages/Admin';
 import MatchingActivityBuilder from './pages/MatchingActivityBuilder';
 import ManageUsers from './pages/ManageUsers';
+import MarketplacePage from './pages/marketplace/MarketplacePage';
+import ResourceDetailPage from './pages/marketplace/ResourceDetailPage';
+import UploadResourcePage from './pages/marketplace/UploadResourcePage';
+import MyResourcesPage from './pages/marketplace/MyResourcesPage';
 import type { ReactNode } from 'react';
 
 interface RouteConfig {
@@ -61,6 +65,28 @@ const routes: RouteConfig[] = [
     name: 'Schedule Builder',
     path: '/schedule-builder',
     element: <ScheduleBuilder />
+  },
+  {
+    name: 'Marketplace',
+    path: '/marketplace',
+    element: <MarketplacePage />
+  },
+  {
+    name: 'Resource Detail',
+    path: '/marketplace/:id',
+    element: <ResourceDetailPage />,
+    visible: false
+  },
+  {
+    name: 'Upload Resource',
+    path: '/marketplace/upload',
+    element: <UploadResourcePage />,
+    visible: false
+  },
+  {
+    name: 'My Resources',
+    path: '/my-resources',
+    element: <MyResourcesPage />
   },
   {
     name: 'Therapist Dashboard',

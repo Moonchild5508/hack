@@ -71,59 +71,86 @@ A web-based platform designed for therapists working with children with ADHD and
   - Direct import functionality from OpenSymbols repository
 - One-click symbol addition functionality
 - Symbol-based interface to support focus needs of ADHD and Autism users
-- **Icon search functionality**: Search bar allowing therapists to quickly find icons by keyword in English, Hindi, or regional languages
-- Real-time search results with icon preview\n- Filter options by category (food, transport, emotions, etc.)\n- Search across both local Indian library and OpenSymbols.org database
+- **Icon search functionality**: Search bar allowing therapists to quickly find icons by keyword in English, Hindi, or regional languages\n- Real-time search results with icon preview
+- Filter options by category (food, transport, emotions, etc.)
+- Search across both local Indian library and OpenSymbols.org database
 
 #### 3.1.3 Multilingual Label System
 - Support for three language layers per item:
   - English
   - Hindi
-  - One regional language (Tamil/Telugu/Marathi/etc.)\n- Language toggle controls (ON/OFF per language)
-- Single or bilingual display mode
-- Example format: Symbol with English 'Apple', Hindi 'सेब', Tamil 'ஆப்பிள்'
-
+  - One regional language (Tamil/Telugu/Marathi/etc.)
+- Language toggle controls (ON/OFF per language)
+- Single or bilingual display mode\n- Example format: Symbol with English 'Apple', Hindi 'सेब', Tamil 'ஆப்பிள்'\n
 ### 3.2 AAC & Visual Tools
 
 #### 3.2.1 AAC Board Builder
 - **Customizable grid layout options**: Therapist can select any n×n grid size (e.g., 2×2, 3×3, 4×4, 5×5, 6×6, etc.)
-- Grid size selector with dropdown or input field for custom dimensions\n- Each cell contains:
-  - Symbol/image
-  - Text label
+- Grid size selector with dropdown or input field for custom dimensions
+- Each cell contains:
+  - Symbol/image\n  - Text label
   - Audio output (TTS or recorded)
 - Interactive functionality: click symbol to play audio
 - Based on LAMP Words for Life AAC methodology
-\n#### 3.2.2 Sentence Builder with Text Box\n- Horizontal text box displayed at the top or bottom of the AAC board
+
+#### 3.2.2 Sentence Builder with Text Box
+- Horizontal text box displayed at the top or bottom of the AAC board
 - Click any icon to add it to the text box in sequence
 - Icons appear in the text box with their corresponding text labels
 - Clear button to reset the text box
 - Delete last icon button for corrections
-- Speak button to read aloud the entire sentence using text-to-speech
-- Visual feedback when icons are added (highlight or animation)
+- Speak button to read aloud the entire sentence using text-to-speech\n- Visual feedback when icons are added (highlight or animation)
 - Supports multilingual sentence construction based on selected language
 
 #### 3.2.3 Visual Schedule Creator
-- Step-by-step routine builder\n- Sequential activity flow (e.g., Wake up → Brush → Uniform → School)
-- Mobile-optimized viewing interface
+- Step-by-step routine builder
+- Sequential activity flow (e.g., Wake up → Brush → Uniform → School)\n- Mobile-optimized viewing interface
 - Tap-to-advance functionality for parents
 
-### 3.3 Export & Sharing\n
-#### 3.3.1 Export Formats
-- PDF (printable format)
-- PNG images
-- Web link (low-bandwidth optimized)
+### 3.3 Resource Marketplace
 
-#### 3.3.2 Parent Assignment System
+#### 3.3.1 Digital Library
+- Built-in marketplace where therapists, educators, and creators can browse therapy resources
+- Search and filter functionality by resource type, age group, condition, language, and price
+- Resource categories: activities, AAC boards, visual schedules, worksheets, games, symbol sets
+\n#### 3.3.2 Resource Actions
+- **Find**: Browse and search available resources with preview functionality
+- **Share**: Upload and share created resources with the community
+- **Customize**: Download resources and modify them in the authoring studio
+- **Buy**: Purchase premium resources from creators
+- **Download**: Free and paid download options
+
+#### 3.3.3 Creator Features
+- Upload custom resources with descriptions and tags
+- Set pricing (free or paid)
+- Track downloads and earnings
+- Receive ratings and reviews from users
+\n#### 3.3.4 User Features
+- Save favorite resources to personal library
+- Rate and review downloaded resources
+- Purchase history and download management
+- Recommendations based on usage patterns
+
+### 3.4 Export & Sharing
+
+#### 3.4.1 Export Formats
+- PDF (printable format)
+- PNG images\n- Web link (low-bandwidth optimized)
+
+#### 3.4.2 Parent Assignment System
 - Generate shareable links
 - WhatsApp-compatible sharing
 - No-login access for parents (optional guest mode)
 - Simple UI with large buttons
 - Low data consumption design
+\n### 3.5 Technical Requirements
 
-### 3.4 Technical Requirements
-\n#### 3.4.1 Low-Bandwidth Optimization\n- Fast loading on 3G networks
+#### 3.5.1 Low-Bandwidth Optimization
+- Fast loading on 3G networks
 - Content caching capability
 - Offline functionality after initial load
-- Minimal animations\n- Optimized for basic smartphones (Anganwadi phone compatibility)
+- Minimal animations
+- Optimized for basic smartphones (Anganwadi phone compatibility)
 
 ## 4. MVP Success Criteria
 The platform must deliver these core capabilities:
@@ -134,32 +161,35 @@ The platform must deliver these core capabilities:
 5. Enhanced matching activities (memory match, match the halves, picture to name)
 6. Multilingual labels
 7. AAC boards with customizable n×n grid size and sentence builder with text-to-speech
-8. Visual schedules
-9. PDF + link export
-10. Parent-friendly viewer
-
-## 5. Design Style
-
+8. Visual schedules\n9. Resource marketplace with find, share, customize, buy, and download functionality
+10. PDF + link export
+11. Parent-friendly viewer
+\n## 5. Design Style\n
 ### 5.1 Color Scheme
 - Primary colors: Soft blue (#4A90E2) and warm orange (#F5A623) for accessibility and visual comfort
 - Background: Clean white (#FFFFFF) with light gray (#F7F7F7) sections
 - Accent colors: Green (#7ED321) for success states, gentle red (#D0021B) for alerts
 
-### 5.2 Visual Details\n- Large, rounded buttons (12px border-radius) for easy tapping
-- High contrast text (WCAG AA compliant)
-- Symbol-first design with minimal text
+### 5.2 Visual Details
+- Large, rounded buttons (12px border-radius) for easy tapping
+- High contrast text (WCAG AA compliant)\n- Symbol-first design with minimal text
 - Grid-based layouts for predictability
 - Drag handles with clear visual affordance
 - Text box with clear borders and sufficient padding for readability
-- Role-specific color coding for login portals\n- Search bar with clear icon and placeholder text
+- Role-specific color coding for login portals
+- Search bar with clear icon and placeholder text
 - Grid size selector with intuitive controls
+- Marketplace cards with resource thumbnails and pricing badges
 
 ### 5.3 Layout Approach
-- Card-based interface for activity templates
-- Grid system for AAC boards and symbol libraries\n- Linear flow for visual schedules
-- Sticky toolbar for frequently used tools
-- Prominent text box placement for sentence building
-- Dashboard with clear sections for client management\n- Mobile-first responsive design\n- Search functionality positioned prominently in content library header
+- Card-based interface for activity templates and marketplace resources
+- Grid system for AAC boards and symbol libraries
+- Linear flow for visual schedules
+- Sticky toolbar for frequently used tools\n- Prominent text box placement for sentence building
+- Dashboard with clear sections for client management
+- Mobile-first responsive design
+- Search functionality positioned prominently in content library header
+- Marketplace with filtering sidebar and resource grid layout
 
 ## 6. Reference Resources
 - OpenSymbols.org: https://www.opensymbols.org/

@@ -192,3 +192,71 @@ export interface PictureNameQuestion {
   correctOptionId: string;
 }
 
+// Marketplace types
+export type ResourceType = 'aac_board' | 'visual_schedule' | 'matching_activity' | 'sorting_activity' | 'custom';
+
+export interface ResourceCategory {
+  id: string;
+  name: string;
+  description: string | null;
+  icon: string | null;
+  created_at: string;
+}
+
+export interface Resource {
+  id: string;
+  title: string;
+  description: string | null;
+  type: ResourceType;
+  category_id: string | null;
+  price: number;
+  creator_id: string;
+  file_data: any;
+  preview_image: string | null;
+  downloads_count: number;
+  rating_avg: number;
+  rating_count: number;
+  is_published: boolean;
+  created_at: string;
+  updated_at: string;
+  category?: ResourceCategory;
+  creator?: Profile;
+}
+
+export interface ResourceDownload {
+  id: string;
+  resource_id: string;
+  user_id: string;
+  downloaded_at: string;
+  resource?: Resource;
+}
+
+export interface ResourceRating {
+  id: string;
+  resource_id: string;
+  user_id: string;
+  rating: number;
+  review: string | null;
+  created_at: string;
+  updated_at: string;
+  user?: Profile;
+}
+
+export interface ResourcePurchase {
+  id: string;
+  resource_id: string;
+  user_id: string;
+  amount: number;
+  purchased_at: string;
+  resource?: Resource;
+}
+
+export interface ResourceFilters {
+  type?: ResourceType;
+  category_id?: string;
+  price_type?: 'all' | 'free' | 'paid';
+  min_rating?: number;
+  search?: string;
+  sort_by?: 'newest' | 'popular' | 'highest_rated';
+}
+

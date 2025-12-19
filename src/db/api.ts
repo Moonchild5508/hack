@@ -478,3 +478,354 @@ export async function createUserAccount(username: string, password: string, full
   }
 }
 
+// ============================================
+// Marketplace API Functions
+// ============================================
+
+import type { Resource, ResourceCategory, ResourceDownload, ResourceRating, ResourcePurchase, ResourceFilters } from '@/types';
+
+// Resource Categories
+export async function getResourceCategories(): Promise<ResourceCategory[]> {
+  const { data, error } = await supabase
+    .from('resource_categories')
+    .select('*')
+    .order('name', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching resource categories:', error);
+    return [];
+  }
+  return Array.isArray(data) ? data : [];
+}
+
+// Resources
+export async function getResources(filters?: ResourceFilters): Promise<Resource[]> {
+  let query = supabase
+    .from('resources')
+    .select(`
+      *,
+      category:resource_categories(*),
+      creator:profiles(id, username, full_name)
+    `)
+    .eq('is_published', true);
+
+  // Apply filters
+  if (filters?.type) {
+    query = query.eq('type', filters.type);
+  }
+
+  if (filters?.category_id) {
+    query = query.eq('category_id', filters.category_id);
+  }
+
+  if (filters?.price_type === 'free') {
+    query = query.eq('price', 0);
+  } else if (filters?.price_type === 'paid') {
+    query = query.gt('price', 0);
+  }
+
+  if (filters?.min_rating) {
+    query = query.gte('rating_avg', filters.min_rating);
+  }
+
+  if (filters?.search) {
+    query = query.or(`title.ilike.%${filters.search}%,description.ilike.%${filters.search}%`);
+  }
+
+  // Apply sorting
+  if (filters?.sort_by === 'popular') {
+    query = query.order('downloads_count', { ascending: false });
+  } else if (filters?.sort_by === 'highest_rated') {
+    query = query.order('rating_avg', { ascending: false });
+  } else {
+    query = query.order('created_at', { ascending: false });
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error('Error fetching resources:', error);
+    return [];
+  }
+  return Array.isArray(data) ? data : [];
+}
+
+export async function getResourceById(id: string): Promise<Resource | null> {
+  const { data, error } = await supabase
+    .from('resources')
+    .select(`
+      *,
+      category:resource_categories(*),
+      creator:profiles(id, username, full_name)
+    `)
+    .eq('id', id)
+    .maybeSingle();
+
+  if (error) {
+    console.error('Error fetching resource:', error);
+    return null;
+  }
+  return data;
+}
+
+export async function createResource(resource: Omit<Resource, 'id' | 'created_at' | 'updated_at' | 'downloads_count' | 'rating_avg' | 'rating_count'>): Promise<Resource | null> {
+  const { data, error } = await supabase
+    .from('resources')
+    .insert(resource)
+    .select()
+    .maybeSingle();
+
+  if (error) {
+    console.error('Error creating resource:', error);
+    return null;
+  }
+  return data;
+}
+
+export async function updateResource(id: string, updates: Partial<Resource>): Promise<Resource | null> {
+  const { data, error } = await supabase
+    .from('resources')
+    .update({ ...updates, updated_at: new Date().toISOString() })
+    .eq('id', id)
+    .select()
+    .maybeSingle();
+
+  if (error) {
+    console.error('Error updating resource:', error);
+    return null;
+  }
+  return data;
+}
+
+export async function deleteResource(id: string): Promise<boolean> {
+  const { error } = await supabase
+    .from('resources')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    console.error('Error deleting resource:', error);
+    return false;
+  }
+  return true;
+}
+
+export async function getMyResources(userId: string): Promise<Resource[]> {
+  const { data, error } = await supabase
+    .from('resources')
+    .select(`
+      *,
+      category:resource_categories(*)
+    `)
+    .eq('creator_id', userId)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching my resources:', error);
+    return [];
+  }
+  return Array.isArray(data) ? data : [];
+}
+
+// Resource Downloads
+export async function downloadResource(resourceId: string, userId: string): Promise<boolean> {
+  try {
+    // Check if already downloaded
+    const { data: existing } = await supabase
+      .from('resource_downloads')
+      .select('id')
+      .eq('resource_id', resourceId)
+      .eq('user_id', userId)
+      .maybeSingle();
+
+    if (existing) {
+      return true; // Already downloaded
+    }
+
+    // Create download record
+    const { error: downloadError } = await supabase
+      .from('resource_downloads')
+      .insert({ resource_id: resourceId, user_id: userId });
+
+    if (downloadError) {
+      console.error('Error creating download record:', downloadError);
+      return false;
+    }
+
+    // Increment download count
+    const { error: incrementError } = await supabase.rpc('increment_downloads', {
+      resource_uuid: resourceId
+    });
+
+    if (incrementError) {
+      console.error('Error incrementing downloads:', incrementError);
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error downloading resource:', error);
+    return false;
+  }
+}
+
+export async function getMyDownloads(userId: string): Promise<ResourceDownload[]> {
+  const { data, error } = await supabase
+    .from('resource_downloads')
+    .select(`
+      *,
+      resource:resources(
+        *,
+        category:resource_categories(*),
+        creator:profiles(id, username, full_name)
+      )
+    `)
+    .eq('user_id', userId)
+    .order('downloaded_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching my downloads:', error);
+    return [];
+  }
+  return Array.isArray(data) ? data : [];
+}
+
+export async function hasDownloaded(resourceId: string, userId: string): Promise<boolean> {
+  const { data, error } = await supabase
+    .from('resource_downloads')
+    .select('id')
+    .eq('resource_id', resourceId)
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  if (error) {
+    console.error('Error checking download status:', error);
+    return false;
+  }
+  return !!data;
+}
+
+// Resource Ratings
+export async function getResourceRatings(resourceId: string): Promise<ResourceRating[]> {
+  const { data, error } = await supabase
+    .from('resource_ratings')
+    .select(`
+      *,
+      user:profiles(id, username, full_name)
+    `)
+    .eq('resource_id', resourceId)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching resource ratings:', error);
+    return [];
+  }
+  return Array.isArray(data) ? data : [];
+}
+
+export async function rateResource(resourceId: string, userId: string, rating: number, review?: string): Promise<ResourceRating | null> {
+  // Check if user already rated
+  const { data: existing } = await supabase
+    .from('resource_ratings')
+    .select('id')
+    .eq('resource_id', resourceId)
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  if (existing) {
+    // Update existing rating
+    const { data, error } = await supabase
+      .from('resource_ratings')
+      .update({ rating, review, updated_at: new Date().toISOString() })
+      .eq('id', existing.id)
+      .select()
+      .maybeSingle();
+
+    if (error) {
+      console.error('Error updating rating:', error);
+      return null;
+    }
+    return data;
+  } else {
+    // Create new rating
+    const { data, error } = await supabase
+      .from('resource_ratings')
+      .insert({ resource_id: resourceId, user_id: userId, rating, review })
+      .select()
+      .maybeSingle();
+
+    if (error) {
+      console.error('Error creating rating:', error);
+      return null;
+    }
+    return data;
+  }
+}
+
+export async function getUserRating(resourceId: string, userId: string): Promise<ResourceRating | null> {
+  const { data, error } = await supabase
+    .from('resource_ratings')
+    .select('*')
+    .eq('resource_id', resourceId)
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  if (error) {
+    console.error('Error fetching user rating:', error);
+    return null;
+  }
+  return data;
+}
+
+// Resource Purchases
+export async function purchaseResource(resourceId: string, userId: string, amount: number): Promise<boolean> {
+  const { error } = await supabase
+    .from('resource_purchases')
+    .insert({ resource_id: resourceId, user_id: userId, amount });
+
+  if (error) {
+    console.error('Error creating purchase:', error);
+    return false;
+  }
+
+  // Also create download record
+  await downloadResource(resourceId, userId);
+
+  return true;
+}
+
+export async function getMyPurchases(userId: string): Promise<ResourcePurchase[]> {
+  const { data, error } = await supabase
+    .from('resource_purchases')
+    .select(`
+      *,
+      resource:resources(
+        *,
+        category:resource_categories(*),
+        creator:profiles(id, username, full_name)
+      )
+    `)
+    .eq('user_id', userId)
+    .order('purchased_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching my purchases:', error);
+    return [];
+  }
+  return Array.isArray(data) ? data : [];
+}
+
+export async function hasPurchased(resourceId: string, userId: string): Promise<boolean> {
+  const { data, error } = await supabase
+    .from('resource_purchases')
+    .select('id')
+    .eq('resource_id', resourceId)
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  if (error) {
+    console.error('Error checking purchase status:', error);
+    return false;
+  }
+  return !!data;
+}
+
