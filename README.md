@@ -2,7 +2,7 @@
 
 # Project Info
 
-# Interactive Therapy Authoring Studio - UPPOO
+## Interactive Therapy Authoring Studio - UPPOO
 
 An India-focused digital therapy platform designed to create, deliver, and monitor culturally relevant therapy for children with behavioural needs.
 
