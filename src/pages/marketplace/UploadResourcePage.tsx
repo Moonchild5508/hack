@@ -6,10 +6,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Upload, FileText } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { createResource, getResourceCategories } from '@/db/api';
+import { supabase } from '@/db/supabase';
 import type { ResourceCategory, ResourceType } from '@/types';
 
 export default function UploadResourcePage() {
@@ -19,6 +20,8 @@ export default function UploadResourcePage() {
 
   const [categories, setCategories] = useState<ResourceCategory[]>([]);
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -26,7 +29,8 @@ export default function UploadResourcePage() {
     category_id: '',
     price: '0',
     preview_image: '',
-    file_data: '{}'
+    file_data: '{}',
+    file_url: ''
   });
 
   useEffect(() => {
@@ -40,6 +44,84 @@ export default function UploadResourcePage() {
   const loadCategories = async () => {
     const data = await getResourceCategories();
     setCategories(data);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Check file size (10MB limit)
+    if (file.size > 10 * 1024 * 1024) {
+      toast({
+        title: 'File Too Large',
+        description: 'File size must be less than 10MB.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    // Check file type
+    const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      toast({
+        title: 'Invalid File Type',
+        description: 'Only PDF and image files are allowed.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    setSelectedFile(file);
+    
+    // Auto-fill title if empty
+    if (!formData.title) {
+      const fileName = file.name.replace(/\.[^/.]+$/, ''); // Remove extension
+      updateFormData('title', fileName);
+    }
+  };
+
+  const uploadFile = async (): Promise<string | null> => {
+    if (!selectedFile || !user) return null;
+
+    setUploading(true);
+    try {
+      const fileExt = selectedFile.name.split('.').pop();
+      const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+      
+      const { error: uploadError, data } = await supabase.storage
+        .from('resource_files')
+        .upload(fileName, selectedFile, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        toast({
+          title: 'Upload Failed',
+          description: uploadError.message,
+          variant: 'destructive'
+        });
+        return null;
+      }
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('resource_files')
+        .getPublicUrl(fileName);
+
+      return publicUrl;
+    } catch (error) {
+      console.error('File upload error:', error);
+      toast({
+        title: 'Upload Error',
+        description: 'An error occurred while uploading the file.',
+        variant: 'destructive'
+      });
+      return null;
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -66,11 +148,29 @@ export default function UploadResourcePage() {
     setLoading(true);
 
     try {
+      // Upload file if selected
+      let fileUrl = formData.file_url;
+      if (selectedFile) {
+        const uploadedUrl = await uploadFile();
+        if (!uploadedUrl) {
+          setLoading(false);
+          return;
+        }
+        fileUrl = uploadedUrl;
+      }
+
       let fileData;
       try {
         fileData = JSON.parse(formData.file_data);
       } catch {
         fileData = { content: formData.file_data };
+      }
+
+      // Add file URL to file_data if exists
+      if (fileUrl) {
+        fileData.file_url = fileUrl;
+        fileData.file_name = selectedFile?.name || 'resource_file';
+        fileData.file_type = selectedFile?.type || 'application/pdf';
       }
 
       const resource = await createResource({
@@ -239,29 +339,63 @@ export default function UploadResourcePage() {
                 </p>
               </div>
 
+              {/* File Upload */}
+              <div className="space-y-2">
+                <Label htmlFor="file_upload">
+                  Upload File (PDF, Images)
+                </Label>
+                <div className="flex items-center gap-4">
+                  <label
+                    htmlFor="file_upload"
+                    className="flex items-center gap-2 px-4 py-2 border border-input rounded-md cursor-pointer hover:bg-accent transition-colors"
+                  >
+                    <Upload className="w-4 h-4" />
+                    <span className="text-sm">Choose File</span>
+                  </label>
+                  <input
+                    id="file_upload"
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png,.gif"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+                  {selectedFile && (
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <FileText className="w-4 h-4" />
+                      <span>{selectedFile.name}</span>
+                      <span className="text-xs">
+                        ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Upload a PDF document or image file (max 10MB). This will be the downloadable resource.
+                </p>
+              </div>
+
               {/* File Data */}
               <div className="space-y-2">
                 <Label htmlFor="file_data">
-                  Resource Data <span className="text-destructive">*</span>
+                  Additional Resource Data (Optional)
                 </Label>
                 <Textarea
                   id="file_data"
-                  placeholder='Enter JSON data or text content for your resource...'
+                  placeholder='Enter JSON data or text content for your resource (optional)...'
                   value={formData.file_data}
                   onChange={(e) => updateFormData('file_data', e.target.value)}
                   rows={8}
                   className="font-mono text-sm"
-                  required
                 />
                 <p className="text-xs text-muted-foreground">
-                  Enter the resource configuration as JSON or plain text. This will be stored and made available for download.
+                  Optional: Additional metadata or configuration in JSON format
                 </p>
               </div>
 
               {/* Submit Button */}
               <div className="flex gap-4">
-                <Button type="submit" disabled={loading} className="flex-1">
-                  {loading ? 'Uploading...' : 'Upload Resource'}
+                <Button type="submit" disabled={loading || uploading} className="flex-1">
+                  {uploading ? 'Uploading File...' : loading ? 'Creating Resource...' : 'Upload Resource'}
                 </Button>
                 <Link to="/marketplace" className="flex-1">
                   <Button type="button" variant="outline" className="w-full">

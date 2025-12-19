@@ -2,14 +2,15 @@
 
 ## 1. Website Overview
 
-### 1.1 Website Name\nTherapy Activity Authoring Studio
+### 1.1 Website Name
+Therapy Activity Authoring Studio
 
 ### 1.2 Website Description
 A web-based platform designed for therapists working with children with ADHD and Autism in India. The platform enables therapists to create, customize, and share therapeutic activities, AAC boards, and visual schedules with culturally relevant Indian content and multilingual support.
+\n## 2. User Roles & Authentication
 
-## 2. User Roles & Authentication
-
-### 2.1 Login System\nThree distinct user roles with separate login portals:
+### 2.1 Login System
+Three distinct user roles with separate login portals:
 \n#### 2.1.1Therapist Login
 - Full access to authoring studio and dashboard\n- Ability to create and manage activities
 - Dashboard to manage assigned children and parents
@@ -54,8 +55,21 @@ A web-based platform designed for therapists working with children with ADHD and
   - Images\n  - Text
   - Audio files
   - Interactive buttons
+  - **PDF files**: Upload and embed PDF documents
 
-#### 3.1.2 Indian-Context Content Library
+#### 3.1.2 PDF Upload Functionality
+- **Upload PDF files**: Therapists can upload PDF documents directly to the authoring studio
+- Supported use cases:
+  - Worksheets and activity sheets
+  - Reference materials and guides
+  - Printable resources
+  - Educational content
+- PDF preview functionality within the platform
+- Attach PDFs to activities for parent and child access
+- Download option for parents to print or view offline
+- File size limit and format validation
+
+#### 3.1.3 Indian-Context Content Library
 - Expanded symbol library including:
   - Indian food items (roti, dosa, rice, samosa, chai, ladoo, biryani, etc.)\n  - Indian transportation (auto-rickshaw, bus, train, metro, cycle-rickshaw, scooter)
   - Indian festivals (Diwali, Eid, Pongal, Holi, Navratri, Onam)
@@ -75,7 +89,7 @@ A web-based platform designed for therapists working with children with ADHD and
 - Filter options by category (food, transport, emotions, etc.)
 - Search across both local Indian library and OpenSymbols.org database
 
-#### 3.1.3 Multilingual Label System
+#### 3.1.4 Multilingual Label System
 - Support for three language layers per item:
   - English
   - Hindi
@@ -109,23 +123,25 @@ A web-based platform designed for therapists working with children with ADHD and
 
 ### 3.3 Resource Marketplace
 
-#### 3.3.1 Digital Library
-- Built-in marketplace where therapists, educators, and creators can browse therapy resources
+#### 3.3.1 Digital Library\n- Built-in marketplace where therapists, educators, and creators can browse therapy resources
 - Search and filter functionality by resource type, age group, condition, language, and price
-- Resource categories: activities, AAC boards, visual schedules, worksheets, games, symbol sets
-\n#### 3.3.2 Resource Actions
+- Resource categories: activities, AAC boards, visual schedules, worksheets, games, symbol sets, PDF documents
+
+#### 3.3.2 Resource Actions
 - **Find**: Browse and search available resources with preview functionality
-- **Share**: Upload and share created resources with the community
+- **Share**: Upload and share created resources with the community (including PDFs)
 - **Customize**: Download resources and modify them in the authoring studio
 - **Buy**: Purchase premium resources from creators
-- **Download**: Free and paid download options
+- **Download**: Free and paid download options for all resource types including PDFs
 
 #### 3.3.3 Creator Features
 - Upload custom resources with descriptions and tags
+- Upload PDF resources to marketplace
 - Set pricing (free or paid)
 - Track downloads and earnings
 - Receive ratings and reviews from users
-\n#### 3.3.4 User Features
+
+#### 3.3.4 User Features
 - Save favorite resources to personal library
 - Rate and review downloaded resources
 - Purchase history and download management
@@ -133,63 +149,66 @@ A web-based platform designed for therapists working with children with ADHD and
 
 ### 3.4 Export & Sharing
 
-#### 3.4.1 Export Formats
-- PDF (printable format)
-- PNG images\n- Web link (low-bandwidth optimized)
+#### 3.4.1 Export Formats\n- PDF (printable format)\n- PNG images
+- Web link (low-bandwidth optimized)\n- Uploaded PDF files (direct download)
 
-#### 3.4.2 Parent Assignment System
-- Generate shareable links
-- WhatsApp-compatible sharing
-- No-login access for parents (optional guest mode)
+#### 3.4.2 Parent Assignment System\n- Generate shareable links
+- WhatsApp-compatible sharing\n- No-login access for parents (optional guest mode)
 - Simple UI with large buttons
 - Low data consumption design
-\n### 3.5 Technical Requirements
+- Access to attached PDF resources
+
+### 3.5 Technical Requirements
 
 #### 3.5.1 Low-Bandwidth Optimization
 - Fast loading on 3G networks
-- Content caching capability
-- Offline functionality after initial load
+- Content caching capability\n- Offline functionality after initial load
 - Minimal animations
-- Optimized for basic smartphones (Anganwadi phone compatibility)
+- Optimized for basic smartphones (Anganwadi phone compatibility)\n- Compressed PDF delivery for faster downloads
 
 ## 4. MVP Success Criteria
 The platform must deliver these core capabilities:
 1. Three-tier login system (therapist, parent, child)
 2. Therapist dashboard with client management
 3. Drag-and-drop activity builder
-4. Expanded Indian symbol library with icon search functionality and OpenSymbols.org integration
-5. Enhanced matching activities (memory match, match the halves, picture to name)
-6. Multilingual labels
-7. AAC boards with customizable n×n grid size and sentence builder with text-to-speech
-8. Visual schedules\n9. Resource marketplace with find, share, customize, buy, and download functionality
-10. PDF + link export
-11. Parent-friendly viewer
-\n## 5. Design Style\n
-### 5.1 Color Scheme
+4. **PDF upload and management functionality**
+5. Expanded Indian symbol library with icon search functionality and OpenSymbols.org integration
+6. Enhanced matching activities (memory match, match the halves, picture to name)
+7. Multilingual labels
+8. AAC boards with customizable n×n grid size and sentence builder with text-to-speech
+9. Visual schedules
+10. Resource marketplace with find, share, customize, buy, and download functionality (including PDFs)
+11. PDF + link export
+12. Parent-friendly viewer
+
+## 5. Design Style
+\n### 5.1 Color Scheme
 - Primary colors: Soft blue (#4A90E2) and warm orange (#F5A623) for accessibility and visual comfort
-- Background: Clean white (#FFFFFF) with light gray (#F7F7F7) sections
-- Accent colors: Green (#7ED321) for success states, gentle red (#D0021B) for alerts
+- Background: Clean white (#FFFFFF) with light gray (#F7F7F7) sections\n- Accent colors: Green (#7ED321) for success states, gentle red (#D0021B) for alerts
 
 ### 5.2 Visual Details
 - Large, rounded buttons (12px border-radius) for easy tapping
-- High contrast text (WCAG AA compliant)\n- Symbol-first design with minimal text
-- Grid-based layouts for predictability
+- High contrast text (WCAG AA compliant)
+- Symbol-first design with minimal text\n- Grid-based layouts for predictability
 - Drag handles with clear visual affordance
 - Text box with clear borders and sufficient padding for readability
 - Role-specific color coding for login portals
 - Search bar with clear icon and placeholder text
 - Grid size selector with intuitive controls
 - Marketplace cards with resource thumbnails and pricing badges
+- PDF upload button with file type indicator
+- PDF preview thumbnails withdocument icon
 
 ### 5.3 Layout Approach
 - Card-based interface for activity templates and marketplace resources
 - Grid system for AAC boards and symbol libraries
-- Linear flow for visual schedules
-- Sticky toolbar for frequently used tools\n- Prominent text box placement for sentence building
+- Linear flow for visual schedules\n- Sticky toolbar for frequently used tools
+- Prominent text box placement for sentence building
 - Dashboard with clear sections for client management
 - Mobile-first responsive design
 - Search functionality positioned prominently in content library header
 - Marketplace with filtering sidebar and resource grid layout
+- PDF upload area with drag-and-drop zone
 
 ## 6. Reference Resources
 - OpenSymbols.org: https://www.opensymbols.org/

@@ -103,10 +103,15 @@ export default function ResourceDetailPage() {
         if (success) {
           toast({
             title: 'Purchase Successful',
-            description: 'Resource purchased and downloaded successfully!'
+            description: 'Resource purchased successfully!'
           });
           setHasAccess(true);
           loadResource(); // Reload to update download count
+          
+          // Trigger file download if file_url exists
+          if (resource.file_data?.file_url) {
+            window.open(resource.file_data.file_url, '_blank');
+          }
         } else {
           toast({
             title: 'Purchase Failed',
@@ -124,6 +129,11 @@ export default function ResourceDetailPage() {
           });
           setHasAccess(true);
           loadResource(); // Reload to update download count
+          
+          // Trigger file download if file_url exists
+          if (resource.file_data?.file_url) {
+            window.open(resource.file_data.file_url, '_blank');
+          }
         } else {
           toast({
             title: 'Download Failed',
@@ -434,10 +444,19 @@ export default function ResourceDetailPage() {
 
                 {user ? (
                   hasAccess ? (
-                    <Button className="w-full" disabled>
-                      <Download className="w-4 h-4 mr-2" />
-                      Already Downloaded
-                    </Button>
+                    <div className="space-y-2">
+                      <Button 
+                        className="w-full" 
+                        onClick={() => resource.file_data?.file_url && window.open(resource.file_data.file_url, '_blank')}
+                        disabled={!resource.file_data?.file_url}
+                      >
+                        <Download className="w-4 h-4 mr-2" />
+                        Download File
+                      </Button>
+                      <p className="text-xs text-center text-muted-foreground">
+                        You have access to this resource
+                      </p>
+                    </div>
                   ) : (
                     <Button className="w-full" onClick={handleDownload} disabled={downloading}>
                       <Download className="w-4 h-4 mr-2" />
@@ -487,6 +506,15 @@ export default function ResourceDetailPage() {
                       )}
                     </div>
                   </div>
+                  {resource.file_data?.file_url && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">File</span>
+                      <Badge variant="secondary" className="font-mono text-xs">
+                        {resource.file_data.file_type?.includes('pdf') ? 'PDF' : 
+                         resource.file_data.file_type?.includes('image') ? 'Image' : 'File'}
+                      </Badge>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
