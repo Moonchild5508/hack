@@ -2,6 +2,47 @@
 
 # Project Info
 
+# Interactive Therapy Authoring Studio - UPPOO
+
+An India-focused digital therapy platform designed to create, deliver, and monitor culturally relevant therapy for children with behavioural needs.
+
+# Why
+
+Most therapy tools are Western-centric. This platform bridges the gap with culturally adapted visuals, activities, and workflows for India.
+
+# What It Does
+
+1. Drag-and-drop therapy authoring for clinicians
+
+2. Offline-first access for low-connectivity regions
+
+3. Standardised, reusable therapy activities
+
+4. Culturally resonant content
+
+# Key USP – Caregiver Access
+
+1. Separate parent/caregiver login
+
+2. Monitor child progress
+
+3. View assigned tasks and reports
+
+4. Improves home-therapy outcomes
+
+# Benefits
+
+1. Reduces clinician workload
+
+2. Improves therapy quality
+
+3. Increases cultural relevance
+
+4. Expands access across India
+
+## Project Presentation
+
+
 
 ## Project Directory
 
@@ -58,6 +99,8 @@ Example:
 # Step 1: Download the code package
 # Step 2: Extract the code package
 # Step 3: Open the code package with your IDE and navigate into the code directory
-# Step 4: In the IDE terminal, run the command to install dependencies: npm i
-# Step 5: Run this command to start the development server: npx vite --host 127.0.0.1
+# Step 4: In the IDE terminal, run the command to install dependencies: pnpm add lucide-react
+# Step 5: In the IDE terminal, run the command to install dependencies: pnpm add -D vite @vitejs/plugin-react
+# Step 6: Run this command to start the development server: npx vite --host 127.0.0.1
+# Your local host will be at http://127.0.0.1:5173/
 ```
