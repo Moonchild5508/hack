@@ -185,13 +185,19 @@ export default function UploadResourcePage() {
         is_published: true
       });
 
-      if (resource) {
+      if (resource && resource.id) {
         toast({
           title: 'Resource Uploaded',
           description: 'Your resource has been uploaded successfully!'
         });
+        
+        // Small delay to ensure database transaction completes
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // Navigate to the resource detail page
         navigate(`/marketplace/${resource.id}`);
       } else {
+        console.error('Resource creation failed - no resource or ID returned');
         toast({
           title: 'Upload Failed',
           description: 'Failed to upload resource. Please try again.',

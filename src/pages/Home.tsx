@@ -47,7 +47,7 @@ export default function Home() {
       <div className="container mx-auto px-4 py-8 xl:py-12">
         <div className="max-w-4xl mx-auto text-center mb-8 xl:mb-12">
           <h1 className="text-3xl xl:text-5xl font-bold mb-4 text-foreground">
-            Therapy Activity Authoring Studio
+            Uppoo
           </h1>
           <p className="text-base xl:text-lg text-muted-foreground max-w-2xl mx-auto">
             Create culturally relevant therapeutic activities for children with ADHD and Autism. 

@@ -97,7 +97,7 @@ export default function Signup() {
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">Create Account</CardTitle>
           <CardDescription className="text-center">
-            Join Therapy Activity Authoring Studio
+            Join Uppoo
           </CardDescription>
         </CardHeader>
         <CardContent>

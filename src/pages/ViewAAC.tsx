@@ -97,7 +97,7 @@ export default function ViewAAC() {
 
         <div className="mt-6 text-center">
           <p className="text-xs text-muted-foreground">
-            Created with Therapy Activity Authoring Studio
+            Created with Uppoo
           </p>
         </div>
       </div>

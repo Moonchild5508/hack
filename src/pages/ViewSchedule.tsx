@@ -157,7 +157,7 @@ export default function ViewSchedule() {
 
         <div className="mt-8 text-center">
           <p className="text-xs text-muted-foreground">
-            Created with Therapy Activity Authoring Studio
+            Created with Uppoo
           </p>
         </div>
       </div>
