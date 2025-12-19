@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Grid3x3, Calendar, Library } from 'lucide-react';
+import { Sparkles, Grid3x3, Calendar, Library, Store } from 'lucide-react';
 
 export default function Home() {
   const tools = [
@@ -27,11 +27,18 @@ export default function Home() {
       color: 'bg-accent'
     },
     {
+      title: 'Resource Marketplace',
+      description: 'Discover, share, and download therapy resources created by the community',
+      icon: Store,
+      path: '/marketplace',
+      color: 'bg-primary'
+    },
+    {
       title: 'My Library',
       description: 'View and manage all your created activities, boards, and schedules',
       icon: Library,
       path: '/library',
-      color: 'bg-primary'
+      color: 'bg-secondary'
     }
   ];
 

@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { User, LogOut, Settings, LayoutDashboard } from 'lucide-react';
+import { User, LogOut, Settings, LayoutDashboard, Store, Package } from 'lucide-react';
 
 export default function Header() {
   const { user, profile, signOut } = useAuth();
@@ -48,6 +48,18 @@ export default function Header() {
                 className="transition-colors hover:text-primary"
               >
                 Library
+              </Link>
+              <Link
+                to="/marketplace"
+                className="transition-colors hover:text-primary"
+              >
+                Marketplace
+              </Link>
+              <Link
+                to="/my-resources"
+                className="transition-colors hover:text-primary"
+              >
+                My Resources
               </Link>
               {profile?.role === 'therapist' || profile?.role === 'admin' ? (
                 <>
@@ -119,6 +131,15 @@ export default function Header() {
                     </p>
                   </div>
                 </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => navigate('/marketplace')}>
+                  <Store className="mr-2 h-4 w-4" />
+                  Marketplace
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/my-resources')}>
+                  <Package className="mr-2 h-4 w-4" />
+                  My Resources
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 {(profile.role === 'therapist' || profile.role === 'admin') && (
                   <DropdownMenuItem onClick={() => navigate('/therapist-dashboard')}>

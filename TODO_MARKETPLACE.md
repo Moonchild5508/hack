@@ -54,7 +54,9 @@ Build a comprehensive digital library/marketplace where therapists, educators, a
 
 ## Routes
 - [x] Add marketplace routes to @/routes.tsx
-- [ ] Update Header navigation with Marketplace link
+- [x] Update Header navigation with Marketplace link
+- [x] Update Home page with Marketplace card
+- [x] Add mobile navigation (dropdown menu)
 
 ## Features
 - [x] Browse resources by category
